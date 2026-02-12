@@ -1,0 +1,5 @@
+- Both methods produced similar numbers of system calls when reading /proc/version because the file is small and fits into a single read operation. The library method normally reduces the number of read() calls through buffering, but this difference was not observable with a small file.
+
+-open() is a low-level system call that interacts directly with the operating system and returns a file descriptor for unbuffered file access. fopen() is a higher-level C library function that returns a FILE* and provides buffered input/output, making file handling easier. Internally, fopen() still uses system calls like open(), but it adds abstraction and efficiency through buffering.
+
+-The library method makes different system calls because functions like fopen() and fgets() use internal buffering and extra logic provided by the C standard library. Instead of reading small chunks directly from the kernel each time, the library may perform fewer, larger read() operations and manage the data in memory before your program accesses it. As a result, you often see fewer or different patterns of system calls compared to the direct open() and read() approach.
